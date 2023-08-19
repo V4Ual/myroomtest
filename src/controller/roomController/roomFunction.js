@@ -18,8 +18,11 @@ class RoomFunctions {
   getRoomDetails = async () => {
     const getRoomAll = await Users.findAll({
       include: {
-        model: RoomDetails
-      }
+        model: RoomDetails,
+        include: {
+          model: RoomPortfolio
+        }
+      },
     })
     if (getRoomAll) {
       return getRoomAll
@@ -33,7 +36,7 @@ class RoomFunctions {
     const addRoomDetails = {
       user_id,
       room_type_id,
-      room_cover_image:room_cover_image == null ? "" : room_cover_image[0].filename,
+      room_cover_image: room_cover_image == null ? "" : room_cover_image[0].filename,
       address_1,
       address_2,
       bethroom,
@@ -41,7 +44,6 @@ class RoomFunctions {
       about,
       monthly_amount,
       deposite_amount,
-
     }
 
     const roomCreate = await RoomDetails.create(addRoomDetails)
@@ -52,7 +54,8 @@ class RoomFunctions {
         for (let i = 0; i < room_picture.length; i++) {
           porfolioimage.push({ room_id: roomCreate.dataValues.id, room_pic: room_picture[i].filename })
         }
-        await RoomPortfolio.bulkCreate(porfolioimage)
+        const addPortfolio = await RoomPortfolio.bulkCreate(porfolioimage)
+        roomCreate.dataValues.room_portfolio = addPortfolio
       }
       return roomCreate
     } else {
@@ -61,6 +64,33 @@ class RoomFunctions {
 
   }
 
+  editRoomDetails = async ({ room_id, user_id, room_type_id, room_cover_image, address_1, address_2, bethroom, room, about, monthly_amount, deposite_amount, room_picture }) => {
+    const editRoomDetails = {
+      room_type_id,
+      room_cover_image: room_cover_image == null ? "" : room_cover_image[0].filename,
+      address_1,
+      address_2,
+      bethroom,
+      room,
+      about,
+      monthly_amount,
+      deposite_amount,
+    }
+
+    const editRoom = await RoomDetails.update(editRoomDetails, {
+      where: {
+        id: room_id,
+        user_id: user_id
+      },
+    })
+
+    if (editRoom) {
+      return editRoom
+    } else {
+      return null
+    }
+
+  }
 
 }
 

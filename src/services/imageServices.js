@@ -1,33 +1,33 @@
 const multer = require('multer')
 const path = require('path')
+const cloudinary = require('cloudinary').v2
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const CLOUD_NAME = process.env.CLOUD_NAME
+const API_KEY = process.env.API_KEY
+const API_SECRET = process.env.API_SECRET
 
-console.log(path.join(__dirname,'../../public/roomPortfolioImages'));
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        if (file.fieldname === 'room_picture') {
-            cb(null, path.join(__dirname, "../../public/roomPortfolioImages"));
-        } else if (file.fieldname === 'room_cover_image') {
-            cb(null, path.join(__dirname, "../../public/roomCoverImage"));
-        }
-    },
+cloudinary.config({
+    cloud_name: CLOUD_NAME,
+    api_key: API_KEY,
+    api_secret: API_SECRET
+});
 
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: (req, file) => {
+            if (file.fieldname === "room_cover_image") {
+                return 'roomCoverImage'
+            } else if (file.fieldname === "room_picture") {
+                return 'roomPortfolioImages'
+            }
+        },
+        allowedFormats: ['jpg', 'png']
     },
 });
 
 const upload = multer({
     storage: storage,
-    fileFilter: (req, file, cb) => {
-        const fileTypes = /jpeg|jpg|png|gif/;
-        const mimetype = fileTypes.test(file.mimetype);
-        const extname = fileTypes.test(path.extname(file.originalname));
-        if (mimetype && extname) {
-            return cb(null, true);
-        }
-        cb("Error: Only image file upload");
-    }
 }).fields([{name:'room_cover_image'},{name:'room_picture'}]);
-
 
 module.exports = upload

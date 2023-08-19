@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const CLOUDNAIRY_IMAGE_ROOMCOVERIMAGE = process.env.CLOUDNAIRY_IMAGE_ROOMCOVERIMAGE
 module.exports = (sequelize, Sequelize) => {
     const RoomDetails = sequelize.define('room_details',
         {
@@ -16,6 +17,9 @@ module.exports = (sequelize, Sequelize) => {
               },
               room_cover_image: {
                 type: DataTypes.STRING(1000),
+                get: function () {
+                  return CLOUDNAIRY_IMAGE_ROOMCOVERIMAGE + this.getDataValue('room_cover_image')
+                }
               },
               address_1: {
                 type: DataTypes.STRING(100),

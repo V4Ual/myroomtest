@@ -61,6 +61,6 @@ db.Roles.hasMany(db.Users,{foreignKey:'role_id'})
 db.RoomDetails.hasMany(db.Users,{foreignKey:'id',sourceKey:"user_id"})
 db.Users.hasMany(db.RoomDetails,{foreignKey:'user_id',sourceKey:'id'})
 db.RoomTypes.hasMany(db.RoomDetails,{foreignKey:'room_type_id',sourceKey:'id'})
-
+db.RoomDetails.hasMany(db.RoomPortfolio, { foreignKey: 'room_id' })
 
 module.exports = db;
