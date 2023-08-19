@@ -68,6 +68,7 @@ class UserController {
 
     getRole = async (req, res) => {
         const getRole = await userFunctions.getRole()
+        console.log({ getRole });
         if (getRole) {
             return response.success('Get All User Role', getRole)
         } else {

@@ -47,13 +47,17 @@ class RoomFunctions {
     }
 
     const roomCreate = await RoomDetails.create(addRoomDetails)
+    console.log({ room_picture });
     if (roomCreate) {
       if (room_picture) {
 
         let porfolioimage = []
-        for (let i = 0; i < room_picture.length; i++) {
-          porfolioimage.push({ room_id: roomCreate.dataValues.id, room_pic: room_picture[i].filename })
-        }
+        room_picture.forEach((item) => {
+          console.log({ item });
+          porfolioimage.push({ room_id: roomCreate.dataValues.id, room_pic: item.filename })
+
+        })
+
         const addPortfolio = await RoomPortfolio.bulkCreate(porfolioimage)
         roomCreate.dataValues.room_portfolio = addPortfolio
       }

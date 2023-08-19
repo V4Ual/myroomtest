@@ -6,7 +6,7 @@ const JWT_SCRECT_KEY = process.env.JWT_SCRECT_KEY
 
 console.log({ JWT_SCRECT_KEY });
 const Users = db.Users
-const Roles = db.Roles
+const Role = db.Roles
 
 
 
@@ -48,25 +48,22 @@ class UserFunctions {
         })
 
         user.dataValues.token = token
-        return {
-            userDetails: user
-        }
-    }
-
-    getRole = async () => {
-        const getRole = await Roles.findAll()
-        if (getRole) {
-            return getRole
+        if (user) {
+            return user
         } else {
             return null
         }
     }
 
-
-
-
-
-
+    getRole = async () => {
+        const getRoles = await Role.findAll({})
+        console.log({ getRoles });
+        if (getRoles) {
+            return getRoles
+        } else {
+            return null
+        }
+    }
 }
 
 module.exports = UserFunctions
