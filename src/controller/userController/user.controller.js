@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt')
 const Responcse = require('../../response')
 const UserFunctions = require('../userController/userFunction')
+const moment = require('moment/moment')
+const { Otp } = require('../../models')
 const userFunctions = new UserFunctions()
 const response = new Responcse()
 class UserController {
@@ -10,7 +12,7 @@ class UserController {
     createUser = async (req, res) => {
         try {
             const { full_name, email, phone_number, password, confirm_password, role_id, latitudes, longitudes } = req.body
-            const checkMail = await userFunctions.checkMail(email)
+            const checkMail = await userFunctions.checkMailPhone(email)
             if (checkMail) {
                 return response.fail('email is already exsiting', {})
             }
@@ -43,19 +45,19 @@ class UserController {
 
 
     login = async (req, res) => {
-        const { email, password } = req.body
-        if (!email || !password) {
+        const { emailPhone, password } = req.body
+        if (!emailPhone || !password) {
             return response.fail('plz fill details', [])
         }
 
-        const checkMail = await userFunctions.checkMail(email);
+        const checkMail = await userFunctions.checkMailPhone(emailPhone);
         if (checkMail == null) {
-            return response.fail("Email does not exsting", []);
+            return response.fail("invalid credentials does not exsting", []);
         }
 
         const passwordMatch = await bcrypt.compare(password, checkMail.dataValues.password)
         if (passwordMatch == true) {
-            let loginData = await userFunctions.loginUser({ email, password });
+            let loginData = await userFunctions.loginUser({ emailPhone, password });
             if (loginData) {
                 return response.success("login sucessfully", loginData);
             } else {
@@ -75,7 +77,49 @@ class UserController {
             return response.fail('Role get fail', [])
         }
     }
+
+
+    sendOtp = async (req, res) => {
+        const { email, type } = req.body
+
+        if (!email || !type) {
+            return response.fail('plz fill details', [])
+        }
+
+        const checkMail = await userFunctions.checkMail(email)
+        if (checkMail) {
+            return response.fail('Email already exsiting', [])
+        }
+
+        console.log({ email, type });
+        const otpCreate = await userFunctions.otpSent({ email, type })
+        console.log(otpCreate);
+        if (otpCreate) {
+            return response.success('Otp sent successfully', otpCreate)
+        } else {
+            return response.fail('Opt sent to fali', {})
+        }
+
+    }
+
+    otpVerify = async (req, res) => {
+        const { email, otp } = req.body
+
+        const otpCheck = await userFunctions.otpVerify({ email, otp })
+        if (otpCheck) {
+            return response.success('Otp verify successfully', {})
+        } else {
+            return response.fail('Opt verify fali', {})
+
+        }
+    }
 }
 
+console.log(moment().format('HH:mm:ss YYYY-MM-DD'), moment().add(2, 'minutes').format('HH:mm:ss YYYY-MM-DD'));
+if (moment().add(3, 'minutes').format('HH:mm:ss YYYY-MM-DD') < moment().add(2, 'minutes').format('HH:mm:ss YYYY-MM-DD')) {
+    console.log('heelo');
+} else {
+    console.log('bad')
+}
 
 module.exports = UserController

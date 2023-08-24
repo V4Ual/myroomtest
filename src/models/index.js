@@ -53,7 +53,7 @@ db.Roles = require('./role.model')(sequelize, Sequelize)
 db.RoomTypes = require('./roomtype.model')(sequelize, Sequelize)
 db.RoomDetails = require('./roomdetails.model')(sequelize, Sequelize)
 db.RoomPortfolio = require('./roomportfolios.model')(sequelize,Sequelize)
-
+db.Otp = require('./otp.model')(sequelize, Sequelize)
 
 
 db.Users.hasOne(db.Roles,{foreignKey:'id'})
