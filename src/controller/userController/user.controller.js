@@ -86,7 +86,7 @@ class UserController {
             return response.fail('plz fill details', [])
         }
 
-        const checkMail = await userFunctions.checkMail(email)
+        const checkMail = await userFunctions.checkMailPhone(email)
         if (checkMail) {
             return response.fail('Email already exsiting', [])
         }
