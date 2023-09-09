@@ -113,6 +113,19 @@ class UserController {
 
         }
     }
+
+
+    getOwnerTenant = async (req, res) => {
+        const { owner_id } = req.params
+        console.log(owner_id);
+        const getOwnerTenant = await userFunctions.getOwnerTenant({ owner_id })
+        if (getOwnerTenant) {
+            return response.success('get Owner Tenant successfully', getOwnerTenant)
+        } else {
+            return response.fail('get Owner Tenant fali', {})
+
+        }
+    }
 }
 
 // console.log(moment().format('HH:mm:ss YYYY-MM-DD'), moment().add(2, 'minutes').format('HH:mm:ss YYYY-MM-DD'));

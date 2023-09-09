@@ -4,7 +4,7 @@ const CLOUDNAIRY_IMAGE_ADHAARPHOTO = process.env.CLOUDNAIRY_IMAGE_ADHAARPHOTO
 const CLOUDNAIRY_IMAGE_SINGATUREPHOTO = process.env.CLOUDNAIRY_IMAGE_SINGATUREPHOTO
 
 module.exports = (sequelize, Sequelize) => {
-    const Roles = sequelize.define('tenant_details',
+    const Tenant = sequelize.define('tenant_details',
         {
             id: {
                 allowNull: false,
@@ -15,6 +15,9 @@ module.exports = (sequelize, Sequelize) => {
             owner_id: {
                 type: DataTypes.INTEGER,
                 allowNull: false
+            },
+            room_id: {
+                type: DataTypes.INTEGER
             },
             name: {
                 type: DataTypes.STRING,
@@ -107,5 +110,5 @@ module.exports = (sequelize, Sequelize) => {
         modelName: 'tenant_details',
 
     });
-    return Roles;
+    return Tenant;
 };

@@ -3,13 +3,14 @@ const dotenv = require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const db = require('../../models')
 const moment = require('moment')
-const { Op } = require('sequelize')
+const { Op, Sequelize } = require('sequelize')
 const EmailServices = require('../../services/emailServices')
 const JWT_SCRECT_KEY = process.env.JWT_SCRECT_KEY
 
 const Users = db.Users
 const Roles = db.Roles
 const Otp = db.Otp
+const Tenant = db.Tenant
 
 
 
@@ -69,9 +70,6 @@ class UserFunctions {
         }
     }
 
-
-
-
     otpSent = async ({ email, type }) => {
         const otp = Math.floor(1000 + Math.random() * 9000);
         const otpCreate = await Otp.create({
@@ -92,6 +90,7 @@ class UserFunctions {
             return null
         }
     }
+
     otpVerify = async ({ email, otp }) => {
         const findOtp = await Otp.findAll({
             where: {
@@ -108,6 +107,28 @@ class UserFunctions {
         console.log(findOtp);
         if (findOtp.length > 0) {
             return findOtp
+        } else {
+            return null
+        }
+    }
+
+    getOwnerTenant = async ({ owner_id }) => {
+        console.log(owner_id);
+        const getOwnerTenant = await Users.findOne({
+            where: {
+                id: owner_id
+            },
+            attributes: {
+                include: [
+                    [Sequelize.literal('(SELECT COUNT(*) FROM tenant_details)'), 'tenant_count'],
+                ]
+            },
+            include: {
+                model: Tenant,
+            },
+        })
+        if (getOwnerTenant) {
+            return getOwnerTenant
         } else {
             return null
         }

@@ -13,6 +13,9 @@ module.exports = {
           type: DataTypes.INTEGER,
           allowNull: false
         },
+        room_id: {
+          type: DataTypes.INTEGER
+        },
         name: {
           type: DataTypes.STRING,
         },

@@ -66,5 +66,8 @@ db.RoomDetails.hasMany(db.Users,{foreignKey:'id',sourceKey:"user_id"})
 db.Users.hasMany(db.RoomDetails,{foreignKey:'user_id',sourceKey:'id'})
 db.RoomTypes.hasMany(db.RoomDetails,{foreignKey:'room_type_id',sourceKey:'id'})
 db.RoomDetails.hasMany(db.RoomPortfolio, { foreignKey: 'room_id' })
-
+db.Tenant.belongsTo(db.Country, { foreignKey: 'country_id' })
+db.Tenant.belongsTo(db.State, { foreignKey: 'state_id' })
+db.Tenant.belongsTo(db.Cities, { foreignKey: 'city_id' })
+db.Users.hasMany(db.Tenant, { foreignKey: 'owner_id' })
 module.exports = db;

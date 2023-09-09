@@ -25,9 +25,13 @@ userRouter.post('/otp-verify', async (req, res) => {
 })
 
 
-
 userRouter.get('/get_role', async (req, res) => {
     const result = await userController.getRole(req, res)
+    res.send(result)
+})
+
+userRouter.get('/get-owner-tenants/:owner_id', async (req, res) => {
+    const result = await userController.getOwnerTenant(req, res)
     res.send(result)
 })
 
