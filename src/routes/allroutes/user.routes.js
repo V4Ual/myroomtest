@@ -1,6 +1,6 @@
 const userRouter = require('express').Router()
 const UserController = require('../../controller/userController/user.controller')
-
+const { Authentication } = require('../../services/authServices')
 const userController = new UserController()
 
 
@@ -30,7 +30,7 @@ userRouter.get('/get_role', async (req, res) => {
     res.send(result)
 })
 
-userRouter.get('/get-owner-tenants/:owner_id', async (req, res) => {
+userRouter.get('/get-owner-tenants/:owner_id', Authentication, async (req, res) => {
     const result = await userController.getOwnerTenant(req, res)
     res.send(result)
 })

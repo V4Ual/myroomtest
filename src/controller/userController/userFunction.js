@@ -5,7 +5,7 @@ const db = require('../../models')
 const moment = require('moment')
 const { Op, Sequelize } = require('sequelize')
 const EmailServices = require('../../services/emailServices')
-const JWT_SCRECT_KEY = process.env.JWT_SCRECT_KEY
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 
 const Users = db.Users
 const Roles = db.Roles
@@ -31,7 +31,6 @@ class UserFunctions {
     }
 
     addUser = async ({ full_name, email, phone_number, password, role_id, latitudes, longitudes, }) => {
-
         const userData = { full_name, email, phone_number, password, role_id, latitudes, longitudes, }
         if (password) {
             userData.password = await bcrypt.hash(password, 12)
@@ -49,7 +48,7 @@ class UserFunctions {
             where: { [Op.or]: [{ email: emailPhone }, { phone_number: emailPhone }] }
         })
 
-        const token = jwt.sign({ emailPhone, password }, JWT_SCRECT_KEY, {
+        const token = jwt.sign({ user_id: user.dataValues.id, emailPhone, password, role_id: user.dataValues.role_id }, JWT_SECRET_KEY, {
             expiresIn: 86400
         })
 

@@ -2,7 +2,7 @@ const roomRouter = require('express').Router()
 // const upload = require('../../services/imageServices')
 const RoomController = require('../../controller/roomController/roomController')
 const multer = require('multer')
-
+const { Authentication } = require('../../services/authServices')
 
 const roomController = new RoomController()
 const cloudinary = require('cloudinary').v2
@@ -37,7 +37,7 @@ const upload = multer({ storage: storage }).fields([{ name: 'room_cover_image', 
 
 
 
-roomRouter.get('/get_room_details', async (req, res) => {
+roomRouter.get('/get_room_details', Authentication, async (req, res) => {
     const result = await roomController.getRoomDetails(req, res)
     res.send(result)
 })
@@ -47,12 +47,12 @@ roomRouter.get('/get_room_type', async (req, res) => {
     res.send(result)
 })
 
-roomRouter.post('/add_room', upload, async (req, res) => {
+roomRouter.post('/add_room', Authentication, upload, async (req, res) => {
     const result = await roomController.createRoom(req, res)
     res.send(result)
 })
 
-roomRouter.put('/edit_room', upload, async (req, res) => {
+roomRouter.put('/edit_room', Authentication, upload, async (req, res) => {
     const result = await roomController.editRoomDetails(req, res)
     res.send(result)
 })

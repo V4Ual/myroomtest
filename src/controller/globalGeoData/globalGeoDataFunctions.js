@@ -6,7 +6,11 @@ class GlobalGeoDataFuncitons {
     constructor() { }
 
     getCountry = async () => {
-        const getCountry = await Country.findAll()
+        const getCountry = await Country.findOne({
+            where: {
+                id: 101
+            }
+        })
         if (getCountry) {
             return getCountry
         } else {
@@ -16,7 +20,7 @@ class GlobalGeoDataFuncitons {
     getState = async ({ countryCode }) => {
         const getState = await State.findAll({
             where: {
-                country_id: countryCode
+                country_id: 101
             }
         })
         if (getState) {
