@@ -1,7 +1,7 @@
-"use strict";
-module.exports = {
-  up: async function (queryInterface, DataTypes) {
-    await queryInterface.createTable("cities", {
+const { DataTypes } = require('sequelize');
+module.exports = (sequelize, Sequelize) => {
+  const Roles = sequelize.define('cities',
+    {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -27,10 +27,9 @@ module.exports = {
         type: DataTypes.DATE,
       },
 
-    })
+    }, {
+    modelName: 'cities',
 
-  },
-  down: async function (queryInterface, DataTypes) {
-    await queryInterface.dropTable("cities")
-  },
+  });
+  return Roles;
 };

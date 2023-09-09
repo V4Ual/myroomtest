@@ -7,7 +7,6 @@ const { Op } = require('sequelize')
 const EmailServices = require('../../services/emailServices')
 const JWT_SCRECT_KEY = process.env.JWT_SCRECT_KEY
 
-console.log({ JWT_SCRECT_KEY });
 const Users = db.Users
 const Roles = db.Roles
 const Otp = db.Otp

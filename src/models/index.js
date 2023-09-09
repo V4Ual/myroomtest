@@ -54,6 +54,10 @@ db.RoomTypes = require('./roomtype.model')(sequelize, Sequelize)
 db.RoomDetails = require('./roomdetails.model')(sequelize, Sequelize)
 db.RoomPortfolio = require('./roomportfolios.model')(sequelize,Sequelize)
 db.Otp = require('./otp.model')(sequelize, Sequelize)
+db.Country = require('./country.model.js')(sequelize, Sequelize)
+db.State = require('./states.model.js')(sequelize, Sequelize)
+db.Cities = require('./cities.model.js')(sequelize, Sequelize)
+db.Tenant = require("./tenant.model")(sequelize, Sequelize)
 
 
 db.Users.hasOne(db.Roles,{foreignKey:'id'})

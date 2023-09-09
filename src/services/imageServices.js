@@ -19,6 +19,12 @@ const storage = new CloudinaryStorage({
                 return 'roomCoverImage'
             } else if (file.fieldname === "room_picture") {
                 return 'roomPortfolioImages'
+            } else if (file.fieldname === "profile_photo") {
+                return 'profilePhoto'
+            } else if (file.fieldname === "adhaar_card_image") {
+                return 'adhaarCardImage'
+            } else if (file.fieldname === "signature_photo") {
+                return 'signaturePhoto'
             }
         },
         allowedFormats: ['jpg', 'png']
@@ -27,4 +33,4 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage })
 
-module.exports = { upload }
+module.exports = upload 

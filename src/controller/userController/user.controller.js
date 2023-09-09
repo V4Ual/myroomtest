@@ -115,11 +115,11 @@ class UserController {
     }
 }
 
-console.log(moment().format('HH:mm:ss YYYY-MM-DD'), moment().add(2, 'minutes').format('HH:mm:ss YYYY-MM-DD'));
-if (moment().add(3, 'minutes').format('HH:mm:ss YYYY-MM-DD') < moment().add(2, 'minutes').format('HH:mm:ss YYYY-MM-DD')) {
-    console.log('heelo');
-} else {
-    console.log('bad')
-}
+// console.log(moment().format('HH:mm:ss YYYY-MM-DD'), moment().add(2, 'minutes').format('HH:mm:ss YYYY-MM-DD'));
+// if (moment().add(3, 'minutes').format('HH:mm:ss YYYY-MM-DD') < moment().add(2, 'minutes').format('HH:mm:ss YYYY-MM-DD')) {
+//     console.log('heelo');
+// } else {
+//     console.log('bad')
+// }
 
 module.exports = UserController

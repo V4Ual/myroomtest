@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const CLOUDNAIRY_IMAGE_ROOMPORTFOLIO = process.env.CLOUDNAIRY_IMAGE_ROOMPORTFOLIO
-console.log({ CLOUDNAIRY_IMAGE_ROOMPORTFOLIO });
 module.exports = (sequelize, Sequelize) => {
     const RoomDetails = sequelize.define('room_portfolios',
         {
