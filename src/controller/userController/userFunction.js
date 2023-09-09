@@ -3,14 +3,14 @@ const dotenv = require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const db = require('../../models')
 const moment = require('moment')
-const { Op } = require('sequelize')
+const { Op, Sequelize } = require('sequelize')
 const EmailServices = require('../../services/emailServices')
-const JWT_SCRECT_KEY = process.env.JWT_SCRECT_KEY
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 
-console.log({ JWT_SCRECT_KEY });
 const Users = db.Users
 const Roles = db.Roles
 const Otp = db.Otp
+const Tenant = db.Tenant
 
 
 
@@ -31,7 +31,6 @@ class UserFunctions {
     }
 
     addUser = async ({ full_name, email, phone_number, password, role_id, latitudes, longitudes, }) => {
-
         const userData = { full_name, email, phone_number, password, role_id, latitudes, longitudes, }
         if (password) {
             userData.password = await bcrypt.hash(password, 12)
@@ -49,7 +48,7 @@ class UserFunctions {
             where: { [Op.or]: [{ email: emailPhone }, { phone_number: emailPhone }] }
         })
 
-        const token = jwt.sign({ emailPhone, password }, JWT_SCRECT_KEY, {
+        const token = jwt.sign({ user_id: user.dataValues.id, emailPhone, password, role_id: user.dataValues.role_id }, JWT_SECRET_KEY, {
             expiresIn: 86400
         })
 
@@ -69,9 +68,6 @@ class UserFunctions {
             return null
         }
     }
-
-
-
 
     otpSent = async ({ email, type }) => {
         const otp = Math.floor(1000 + Math.random() * 9000);
@@ -93,6 +89,7 @@ class UserFunctions {
             return null
         }
     }
+
     otpVerify = async ({ email, otp }) => {
         const findOtp = await Otp.findAll({
             where: {
@@ -109,6 +106,28 @@ class UserFunctions {
         console.log(findOtp);
         if (findOtp.length > 0) {
             return findOtp
+        } else {
+            return null
+        }
+    }
+
+    getOwnerTenant = async ({ owner_id }) => {
+        console.log(owner_id);
+        const getOwnerTenant = await Users.findOne({
+            where: {
+                id: owner_id
+            },
+            attributes: {
+                include: [
+                    [Sequelize.literal('(SELECT COUNT(*) FROM tenant_details)'), 'tenant_count'],
+                ]
+            },
+            include: {
+                model: Tenant,
+            },
+        })
+        if (getOwnerTenant) {
+            return getOwnerTenant
         } else {
             return null
         }
